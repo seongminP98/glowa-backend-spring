@@ -1,5 +1,6 @@
 package glowa.glowabackendspring.entity;
 
+import com.sun.istack.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,17 +14,18 @@ import javax.persistence.Id;
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Users {
+public class User extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String user_id;
+    @NotNull
+    private String userId;
     private String nickname;
     private String password;
     private String image;
 
-    public Users(String user_id, String nickname, String password) {
-        this.user_id = user_id;
+    public User(String userId, String nickname, String password) {
+        this.userId = userId;
         this.nickname = nickname;
         this.password = password;
     }
