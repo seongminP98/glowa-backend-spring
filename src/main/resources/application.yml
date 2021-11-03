@@ -16,3 +16,5 @@ spring:
 
 logging.level:
   org.hibernate.SQL: debug
+
+server.error.include-message: always
