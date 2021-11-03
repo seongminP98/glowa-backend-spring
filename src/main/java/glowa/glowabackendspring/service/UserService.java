@@ -1,6 +1,7 @@
 package glowa.glowabackendspring.service;
 
 import glowa.glowabackendspring.entity.User;
+import glowa.glowabackendspring.exception.LoginException;
 import glowa.glowabackendspring.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,11 +35,11 @@ public class UserService {
     private void validateDuplicateUser(User user) {
         List<User> findByUserId = userRepository.findByUserId(user.getUserId());
         if(!findByUserId.isEmpty()) {
-            throw new IllegalStateException("이미 사용중인 아이디입니다.");
+            throw new LoginException("이미 사용중인 아이디입니다.");
         }
         List<User> findByNickname = userRepository.findByNickname(user.getNickname());
         if(!findByNickname.isEmpty()) {
-            throw new IllegalStateException("이미 사용중인 닉네임입니다.");
+            throw new LoginException("이미 사용중인 닉네임입니다.");
         }
     }
 
