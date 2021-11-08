@@ -28,8 +28,8 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "friend")
     private List<Friends> friends = new ArrayList<>();
 
-    @OneToMany(mappedBy = "schedule")
-    private List<Schedule> schedules = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<ScheduleManage> schedules = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<Favorites> favorites = new ArrayList<>();

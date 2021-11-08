@@ -25,5 +25,5 @@ public class InvSchedule extends BaseEntity {
     private User friend;
     
     @JoinColumn(name = "schedule_id")
-    private Schedule schedule;
+    private Long scheduleId;
 }
