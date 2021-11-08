@@ -17,8 +17,10 @@ public class Friends extends BaseEntity{
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "my_id")
-    private User user;
+    @JoinColumn(name = "me")
+    private User me;
 
-    private Long friendId;
+    @ManyToOne
+    @JoinColumn(name = "friend")
+    private User friend;
 }
