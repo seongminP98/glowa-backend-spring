@@ -1,6 +1,6 @@
 package glowa.glowabackendspring.service;
 
-import glowa.glowabackendspring.entity.User;
+import glowa.glowabackendspring.domain.User;
 import glowa.glowabackendspring.exception.ConflictException;
 import glowa.glowabackendspring.exception.LoginException;
 import glowa.glowabackendspring.repository.UserRepository;
@@ -10,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
