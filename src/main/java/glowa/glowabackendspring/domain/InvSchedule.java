@@ -23,8 +23,7 @@ public class InvSchedule extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "friend_id")
     private User friend;
-
+    
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
-    
 }
