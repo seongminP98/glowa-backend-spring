@@ -1,12 +1,11 @@
 package glowa.glowabackendspring.apiController;
 
-import com.sun.istack.NotNull;
 import glowa.glowabackendspring.exception.BindingException;
 import glowa.glowabackendspring.exception.ConflictException;
 import glowa.glowabackendspring.exception.LoginException;
 import glowa.glowabackendspring.exhandler.ErrorResult;
 import glowa.glowabackendspring.service.UserService;
-import glowa.glowabackendspring.entity.User;
+import glowa.glowabackendspring.domain.User;
 import glowa.glowabackendspring.session.SessionConst;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,14 +14,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotEmpty;
-import java.util.List;
 
 @Slf4j
 @RestController

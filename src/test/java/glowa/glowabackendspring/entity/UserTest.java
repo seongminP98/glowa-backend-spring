@@ -1,6 +1,7 @@
 package glowa.glowabackendspring.entity;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import glowa.glowabackendspring.domain.User;
 import glowa.glowabackendspring.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 
 import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

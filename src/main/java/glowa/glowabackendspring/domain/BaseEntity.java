@@ -1,4 +1,4 @@
-package glowa.glowabackendspring.entity;
+package glowa.glowabackendspring.domain;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
