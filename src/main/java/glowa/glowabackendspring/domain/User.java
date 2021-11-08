@@ -24,7 +24,7 @@ public class User extends BaseEntity {
     @NotNull
     private String password;
     private String image;
-    
+
     @OneToMany(mappedBy = "friend")
     private List<Friends> friends = new ArrayList<>();
 
