@@ -26,7 +26,7 @@ public class User extends BaseEntity {
     private String image;
 
     @OneToMany(mappedBy = "friend")
-    private List<Friends> friends = new ArrayList<>();
+    private List<Friend> friends = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<ScheduleManage> schedules = new ArrayList<>();
