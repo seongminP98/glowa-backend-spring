@@ -3,7 +3,7 @@ package glowa.glowabackendspring.service;
 import glowa.glowabackendspring.domain.User;
 import glowa.glowabackendspring.exception.ConflictException;
 import glowa.glowabackendspring.exception.LoginException;
-import glowa.glowabackendspring.repository.UserRepository;
+import glowa.glowabackendspring.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -1,4 +1,4 @@
-package glowa.glowabackendspring.repository;
+package glowa.glowabackendspring.repository.user;
 
 import glowa.glowabackendspring.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
