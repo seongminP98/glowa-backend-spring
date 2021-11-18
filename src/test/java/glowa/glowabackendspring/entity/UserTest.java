@@ -1,21 +1,24 @@
 package glowa.glowabackendspring.entity;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import glowa.glowabackendspring.domain.QUser;
 import glowa.glowabackendspring.domain.User;
 import glowa.glowabackendspring.repository.UserRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
 import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-@Commit
 class UserTest {
 
     @Autowired
@@ -45,18 +48,15 @@ class UserTest {
         for (User u : result) {
             System.out.println("user = " + u);
         }
-        userRepository.findById(result.get(0).getId());
+        Optional<User> userById = userRepository.findById(result.get(0).getId());
+        userById.ifPresent(value -> assertThat(value.getId()).isEqualTo(1));
+
         List<User> all = userRepository.findAll();
-        List<User> byNickname = userRepository.findByNickname(result.get(0).getNickname());
-        for (User user1 : byNickname) {
-            System.out.println("user1.getNickname() = " + user1.getNickname());
-        }
+        Optional<User> userByNickname = userRepository.findByNickname(result.get(0).getNickname());
+        userByNickname.ifPresent(value -> assertThat(value.getNickname()).isEqualTo("닉네임1"));
+
         for (User user1 : all) {
             System.out.println("user1.getNickname() = " + user1.getNickname());
         }
-
-
     }
-
-
 }
