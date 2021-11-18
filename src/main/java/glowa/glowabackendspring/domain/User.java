@@ -28,7 +28,7 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "friend")
     private List<Friend> friends = new ArrayList<>();
 
-    @OneToMany(mappedBy = "req_friend")
+    @OneToMany(mappedBy = "reqFriend")
     private List<ReqFriends> reqFriends = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
