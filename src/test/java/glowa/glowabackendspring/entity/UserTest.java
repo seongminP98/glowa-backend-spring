@@ -62,9 +62,9 @@ class UserTest {
         for (User user1 : all) {
             System.out.println("user1.getNickname() = " + user1.getNickname());
         }
-        List<UserSearchDto> search = userRepository.search("호랑이", 2L);
-        for (UserSearchDto userSearchDto : search) {
-            System.out.println("userSearchDto = " + userSearchDto);
-        }
+        List<UserSearchDto> search = userRepository.search("두꺼비", 2L);
+        List<UserSearchDto> search2 = userRepository.search("호랑이", 2L);
+        assertThat(search).size().isEqualTo(0);
+        assertThat(search2).size().isEqualTo(1);
     }
 }
