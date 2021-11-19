@@ -1,13 +1,16 @@
 package glowa.glowabackendspring.entity;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import glowa.glowabackendspring.domain.Friend;
 import glowa.glowabackendspring.domain.QUser;
 import glowa.glowabackendspring.domain.User;
-import glowa.glowabackendspring.dto.user.UserSearchDto;
+import glowa.glowabackendspring.dto.user.UserInfoDto;
 import glowa.glowabackendspring.repository.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -19,6 +22,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
+@Commit
 class UserTest {
 
     @Autowired
@@ -41,6 +45,16 @@ class UserTest {
         em.persist(userC);
         em.persist(userD);
 
+        Friend friendA = new Friend(userA, userB);
+        Friend friendB = new Friend(userB, userA);
+        Friend friendC = new Friend(userA, userC);
+        Friend friendD = new Friend(userC, userA);
+        em.persist(friendA);
+        em.persist(friendB);
+        em.persist(friendC);
+        em.persist(friendD);
+
+
         em.flush();
         em.clear();
 
@@ -62,9 +76,23 @@ class UserTest {
         for (User user1 : all) {
             System.out.println("user1.getNickname() = " + user1.getNickname());
         }
-        List<UserSearchDto> search = userRepository.search("호랑이", 2L);
-        for (UserSearchDto userSearchDto : search) {
-            System.out.println("userSearchDto = " + userSearchDto);
+        List<UserInfoDto> search = userRepository.search("두꺼비", 2L);
+        List<UserInfoDto> search2 = userRepository.search("호랑이", 2L);
+        assertThat(search).size().isEqualTo(0);
+        assertThat(search2).size().isEqualTo(1);
+
+        System.out.println("=====================================");
+
+        List<UserInfoDto> userInfoDtos = userRepository.friendList(1L);
+        for (UserInfoDto userInfoDto : userInfoDtos) {
+            System.out.println(userInfoDto);
+        }
+
+        System.out.println("=====================================");
+
+        List<User> users = userRepository.friendListUser(1L);
+        for (User user1 : users) {
+            System.out.println("user1 = " + user1);
         }
     }
 }
