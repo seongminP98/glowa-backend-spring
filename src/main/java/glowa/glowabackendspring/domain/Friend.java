@@ -23,4 +23,10 @@ public class Friend extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "friend")
     private User friend;
+
+    public Friend(User me, User friend) {
+        this.me = me;
+        this.friend = friend;
+    }
+
 }
