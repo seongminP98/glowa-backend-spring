@@ -2,8 +2,8 @@ package glowa.glowabackendspring.repository.user;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import glowa.glowabackendspring.domain.QUser;
-import glowa.glowabackendspring.dto.user.QUserSearchDto;
-import glowa.glowabackendspring.dto.user.UserSearchDto;
+import glowa.glowabackendspring.dto.user.QUserInfoDto;
+import glowa.glowabackendspring.dto.user.UserInfoDto;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -19,9 +19,9 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
     }
 
     @Override
-    public List<UserSearchDto> search(String nickname, Long id) {
+    public List<UserInfoDto> search(String nickname, Long id) {
         return queryFactory
-                .select(new QUserSearchDto(
+                .select(new QUserInfoDto(
                         user.id,
                         user.nickname,
                         user.password
