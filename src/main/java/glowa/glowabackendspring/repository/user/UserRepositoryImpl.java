@@ -24,7 +24,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
                 .select(new QUserInfoDto(
                         user.id,
                         user.nickname,
-                        user.password
+                        user.image
                 ))
                 .from(user)
                 .where(
