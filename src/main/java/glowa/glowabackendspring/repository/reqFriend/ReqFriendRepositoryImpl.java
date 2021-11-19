@@ -1,7 +1,6 @@
-package glowa.glowabackendspring.repository.friend;
+package glowa.glowabackendspring.repository.reqFriend;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import glowa.glowabackendspring.domain.QReqFriends;
 import glowa.glowabackendspring.domain.ReqFriends;
 
 import javax.persistence.EntityManager;

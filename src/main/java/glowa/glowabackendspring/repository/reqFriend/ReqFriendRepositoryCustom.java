@@ -1,4 +1,4 @@
-package glowa.glowabackendspring.repository.friend;
+package glowa.glowabackendspring.repository.reqFriend;
 
 import glowa.glowabackendspring.domain.ReqFriends;
 
