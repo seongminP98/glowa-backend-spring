@@ -3,7 +3,7 @@ package glowa.glowabackendspring.entity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import glowa.glowabackendspring.domain.QUser;
 import glowa.glowabackendspring.domain.User;
-import glowa.glowabackendspring.dto.user.UserSearchDto;
+import glowa.glowabackendspring.dto.user.UserInfoDto;
 import glowa.glowabackendspring.repository.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,8 +62,8 @@ class UserTest {
         for (User user1 : all) {
             System.out.println("user1.getNickname() = " + user1.getNickname());
         }
-        List<UserSearchDto> search = userRepository.search("두꺼비", 2L);
-        List<UserSearchDto> search2 = userRepository.search("호랑이", 2L);
+        List<UserInfoDto> search = userRepository.search("두꺼비", 2L);
+        List<UserInfoDto> search2 = userRepository.search("호랑이", 2L);
         assertThat(search).size().isEqualTo(0);
         assertThat(search2).size().isEqualTo(1);
     }
