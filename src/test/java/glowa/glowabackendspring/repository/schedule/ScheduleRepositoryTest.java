@@ -56,4 +56,11 @@ public class ScheduleRepositoryTest {
         assertThat(result.getName()).isEqualTo("저녁약속");
     }
 
+    @Test
+    public void findOneByIdAndMaster() {
+        Schedule result = scheduleRepository.findOneByIdAndMaster(2L, 1L);
+        System.out.println("result = " + result);
+        assertThat(result.getMaster()).isEqualTo(1);
+        assertThat(result.getName()).isEqualTo("저녁약속");
+    }
 }
