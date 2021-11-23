@@ -2,6 +2,8 @@ package glowa.glowabackendspring.repository.schedule;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import glowa.glowabackendspring.domain.Schedule;
+import glowa.glowabackendspring.domain.User;
+import glowa.glowabackendspring.repository.user.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +22,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-@Rollback
+@Commit
 public class ScheduleRepositoryTest {
     @Autowired
     EntityManager em;
@@ -28,14 +30,21 @@ public class ScheduleRepositoryTest {
     JPAQueryFactory queryFactory;
     @Autowired
     ScheduleRepository scheduleRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @BeforeEach
     public void before() {
         queryFactory = new JPAQueryFactory(em);
 
-        Schedule schedule1 = new Schedule(1L, "점심약속", LocalDateTime.now(), "집 앞");
-        Schedule schedule2 = new Schedule(1L, "저녁약속", LocalDateTime.now(), "역 앞");
-        Schedule schedule3 = new Schedule(2L, "점심약속", LocalDateTime.now(), "집");
+        User userA = new User("test1", "눈큰올빼미", "1234");
+        User userB = new User("test2", "작은호랑이", "12343456");
+        em.persist(userA);
+        em.persist(userB);
+
+        Schedule schedule1 = new Schedule(userA, "점심약속", LocalDateTime.now(), "집 앞");
+        Schedule schedule2 = new Schedule(userA, "저녁약속", LocalDateTime.now(), "역 앞");
+        Schedule schedule3 = new Schedule(userB, "점심약속", LocalDateTime.now(), "집");
 
         em.persist(schedule1);
         em.persist(schedule2);
@@ -43,22 +52,23 @@ public class ScheduleRepositoryTest {
     }
 
     @Test
-    public void findByMasterAndName() {
-        Optional<Schedule> result = scheduleRepository.findOneByMasterAndName(1L, "점심약속");
-        result.ifPresent(value -> assertThat(value.getName()).isEqualTo("점심약속"));
+    public void findOneByMasterAndName() {
+        Optional<User> user = userRepository.findById(1L);
+        user.flatMap(u -> scheduleRepository.findOneByMasterAndName(u, "점심약속")).ifPresent(value -> assertThat(value.getName()).isEqualTo("점심약속"));
     }
 
     @Test
     public void findOneById() {
         Optional<Schedule> result = scheduleRepository.findOneById(2L);
-        result.ifPresent(value -> assertThat(value.getMaster()).isEqualTo(1));
+        result.ifPresent(value -> assertThat(value.getMaster().getId()).isEqualTo(1));
         result.ifPresent(value -> assertThat(value.getName()).isEqualTo("저녁약속"));
     }
 
     @Test
     public void findOneByIdAndMaster() {
-        Optional<Schedule> result = scheduleRepository.findOneByIdAndMaster(2L, 1L);
-        result.ifPresent(value -> assertThat(value.getMaster()).isEqualTo(1));
-        result.ifPresent(value -> assertThat(value.getName()).isEqualTo("저녁약속"));
+        Optional<User> user = userRepository.findById(1L);
+        user.flatMap(u -> scheduleRepository.findOneByIdAndMaster(2L, u)).ifPresent(value -> assertThat(value.getName()).isEqualTo("저녁약속"));
+        user.flatMap(u -> scheduleRepository.findOneByIdAndMaster(2L, u)).ifPresent(value -> assertThat(value.getMaster().getId()).isEqualTo(1));
+
     }
 }
