@@ -8,17 +8,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-@Commit
+@Rollback
 public class ScheduleRepositoryTest {
     @Autowired
     EntityManager em;
@@ -42,25 +44,21 @@ public class ScheduleRepositoryTest {
 
     @Test
     public void findByMasterAndName() {
-        Schedule result = scheduleRepository.findOneByMasterAndName(1L, "점심약속");
-        System.out.println("result = " + result);
-        assertThat(result.getName()).isEqualTo("점심약속");
-
+        Optional<Schedule> result = scheduleRepository.findOneByMasterAndName(1L, "점심약속");
+        result.ifPresent(value -> assertThat(value.getName()).isEqualTo("점심약속"));
     }
 
     @Test
     public void findOneById() {
-        Schedule result = scheduleRepository.findOneById(2L);
-        System.out.println("result = " + result);
-        assertThat(result.getMaster()).isEqualTo(1);
-        assertThat(result.getName()).isEqualTo("저녁약속");
+        Optional<Schedule> result = scheduleRepository.findOneById(2L);
+        result.ifPresent(value -> assertThat(value.getMaster()).isEqualTo(1));
+        result.ifPresent(value -> assertThat(value.getName()).isEqualTo("저녁약속"));
     }
 
     @Test
     public void findOneByIdAndMaster() {
-        Schedule result = scheduleRepository.findOneByIdAndMaster(2L, 1L);
-        System.out.println("result = " + result);
-        assertThat(result.getMaster()).isEqualTo(1);
-        assertThat(result.getName()).isEqualTo("저녁약속");
+        Optional<Schedule> result = scheduleRepository.findOneByIdAndMaster(2L, 1L);
+        result.ifPresent(value -> assertThat(value.getMaster()).isEqualTo(1));
+        result.ifPresent(value -> assertThat(value.getName()).isEqualTo("저녁약속"));
     }
 }
