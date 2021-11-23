@@ -35,6 +35,9 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<Favorites> favorites = new ArrayList<>();
 
+    @OneToMany(mappedBy = "master")
+    private List<Schedule> masterSchedules = new ArrayList<>();
+
     public User(String userId, String nickname, String password) {
         this.userId = userId;
         this.nickname = nickname;
