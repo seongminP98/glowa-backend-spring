@@ -17,7 +17,9 @@ public class Schedule extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long master;
+    @ManyToOne
+    private User master;
+
     private String name;
     private LocalDateTime date;
     private String place;
@@ -25,7 +27,10 @@ public class Schedule extends BaseEntity {
     @OneToMany(mappedBy = "schedule")
     private List<ScheduleManage> scheduleManages = new ArrayList<>();
 
-    public Schedule(Long master, String name, LocalDateTime date, String place) {
+    @OneToMany(mappedBy = "schedule")
+    private List<InvSchedule> invSchedules = new ArrayList<>();
+
+    public Schedule(User master, String name, LocalDateTime date, String place) {
         this.master = master;
         this.name = name;
         this.date = date;

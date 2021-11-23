@@ -24,5 +24,10 @@ public class Favorites extends BaseEntity {
     private String address;
     private String kind;
 
-
+    public Favorites(User user, String restaurant, String address, String kind) {
+        this.user = user;
+        this.restaurant = restaurant;
+        this.address = address;
+        this.kind = kind;
+    }
 }
