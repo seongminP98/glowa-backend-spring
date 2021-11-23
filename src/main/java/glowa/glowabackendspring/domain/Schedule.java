@@ -25,6 +25,9 @@ public class Schedule extends BaseEntity {
     @OneToMany(mappedBy = "schedule")
     private List<ScheduleManage> scheduleManages = new ArrayList<>();
 
+    @OneToMany(mappedBy = "schedule")
+    private List<InvSchedule> invSchedules = new ArrayList<>();
+
     public Schedule(Long master, String name, LocalDateTime date, String place) {
         this.master = master;
         this.name = name;
