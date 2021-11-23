@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -37,8 +38,8 @@ class FavoritesRepositoryTest {
     public void before() {
         queryFactory = new JPAQueryFactory(em);
 
-        User userA = new User("test1","눈큰올빼미","1234");
-        User userB = new User("test2","작은호랑이","12343456");
+        User userA = new User("test1", "눈큰올빼미", "1234");
+        User userB = new User("test2", "작은호랑이", "12343456");
         em.persist(userA);
         em.persist(userB);
 
@@ -53,7 +54,7 @@ class FavoritesRepositoryTest {
     }
 
     @Test
-    public void findOneByUserAndAddress(){
+    public void findOneByUserAndAddress() {
         Optional<User> userA = userRepository.findById(1L);
         Optional<User> userB = userRepository.findById(2L);
 
@@ -62,6 +63,14 @@ class FavoritesRepositoryTest {
 
         userB.flatMap(user -> favoritesRepository.findOneByUserAndAddress(user, "아차산역 21"))
                 .ifPresent(favorites -> assertThat(favorites.getId()).isEqualTo(4));
+    }
+
+    @Test
+    public void findAllByUser() {
+        User user = userRepository.findById(1L).get();
+        List<Favorites> result = favoritesRepository.findAllByUser(user);
+        assertThat(result.size()).isEqualTo(2);
+        assertThat(result.get(0).getId()).isEqualTo(1L);
     }
 
 }
