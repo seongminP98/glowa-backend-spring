@@ -4,6 +4,7 @@ import glowa.glowabackendspring.domain.Friend;
 import glowa.glowabackendspring.domain.User;
 import glowa.glowabackendspring.dto.user.UserInfoDto;
 import glowa.glowabackendspring.exception.LoginException;
+import glowa.glowabackendspring.exception.UserException;
 import glowa.glowabackendspring.repository.friend.FriendRepository;
 import glowa.glowabackendspring.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +33,16 @@ public class FriendService {
         }
     }
 
+    public long delete(User me, User friend) {
+        Optional<User> user1 = userRepository.findById(me.getId());
+        Optional<User> user2 = userRepository.findById(friend.getId());
+        if(user1.isPresent() && user2.isPresent()) {
+            long result1 = friendRepository.deleteByMeAndFriend(user1.get(), user2.get());
+            long result2 = friendRepository.deleteByMeAndFriend(user2.get(), user1.get());
+            return result1 + result2;
+        } else {
+            throw new UserException("잘못된 유저입니다.");
+        }
+    }
 
 }
