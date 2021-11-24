@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface FriendRepository extends JpaRepository<Friend, Long>, FriendRepositoryCustom {
     List<Friend> findAllByMe(User user);
+    long deleteByMeAndFriend(User me, User friend);
 }
