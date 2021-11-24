@@ -41,9 +41,11 @@ public class UserService {
         return user;
     }
 
-    public List<UserInfoDto> search(String nickname, Long userId) {
-        return userRepository.search(nickname, userId);
+    public List<UserInfoDto> search(String nickname, User user) {
+        return userRepository.search(nickname, user.getId());
     }
+
+
 
     private void validateDuplicateUser(User user) {
         Optional<User> findByUserId = userRepository.findByUserId(user.getUserId());
