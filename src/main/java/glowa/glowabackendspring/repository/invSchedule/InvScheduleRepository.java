@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface InvScheduleRepository extends JpaRepository<InvSchedule, Long> {
     Optional<InvSchedule> findOneByScheduleAndMeAndFriend(Schedule schedule, User me, User friend);
-    List<InvSchedule> findAllByMe(User me);
+    List<InvSchedule> findAllByFriend(User friend); //내가 초대받은 스케줄 목록
     long deleteByScheduleAndMeAndFriend(Schedule schedule, User me, User friend);
 
 }

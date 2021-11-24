@@ -23,4 +23,10 @@ public class ScheduleManage extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
+
+
+    public ScheduleManage(User user, Schedule schedule) {
+        this.user = user;
+        this.schedule = schedule;
+    }
 }
