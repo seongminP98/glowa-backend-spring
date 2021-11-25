@@ -45,8 +45,6 @@ public class UserService {
         return userRepository.search(nickname, user.getId());
     }
 
-
-
     private void validateDuplicateUser(User user) {
         Optional<User> findByUserId = userRepository.findByUserId(user.getUserId());
         if(findByUserId.isPresent()) {
