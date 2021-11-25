@@ -17,14 +17,14 @@ public class ReqFriendRepositoryImpl implements ReqFriendRepositoryCustom{
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    @Override
-    public ReqFriends alreadyReq(Long myId, Long friendId) {
-        return queryFactory
-                .selectFrom(reqFriends)
-                .where(
-                        reqFriends.me.id.eq(myId).and(reqFriends.reqFriend.id.eq(friendId))
-                ).fetchOne();
-    }
+//    @Override
+//    public ReqFriends alreadyReq(Long myId, Long friendId) {
+//        return queryFactory
+//                .selectFrom(reqFriends)
+//                .where(
+//                        reqFriends.me.id.eq(myId).and(reqFriends.reqFriend.id.eq(friendId))
+//                ).fetchOne();
+//    }
 
     @Override
     public ReqFriends checkSentReq(Long myId, Long friendId) {

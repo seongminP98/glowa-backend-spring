@@ -1,6 +1,7 @@
 package glowa.glowabackendspring.service;
 
 import glowa.glowabackendspring.domain.User;
+import glowa.glowabackendspring.dto.user.UserInfoDto;
 import glowa.glowabackendspring.exception.ConflictException;
 import glowa.glowabackendspring.exception.LoginException;
 import glowa.glowabackendspring.repository.user.UserRepository;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -37,6 +39,10 @@ public class UserService {
             throw new LoginException("잘못된 비밀번호입니다.");
         }
         return user;
+    }
+
+    public List<UserInfoDto> search(String nickname, User user) {
+        return userRepository.search(nickname, user.getId());
     }
 
     private void validateDuplicateUser(User user) {

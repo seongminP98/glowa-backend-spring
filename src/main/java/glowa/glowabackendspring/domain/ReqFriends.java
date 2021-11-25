@@ -24,4 +24,8 @@ public class ReqFriends extends BaseEntity {
     @JoinColumn(name = "req_friend")
     private User reqFriend;
 
+    public ReqFriends(User me, User reqFriend) {
+        this.me = me;
+        this.reqFriend = reqFriend;
+    }
 }
