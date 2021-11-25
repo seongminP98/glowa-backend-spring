@@ -1,9 +1,11 @@
 package glowa.glowabackendspring.apiController;
 
+import glowa.glowabackendspring.dto.user.UserInfoDto;
 import glowa.glowabackendspring.exception.BindingException;
 import glowa.glowabackendspring.exception.ConflictException;
 import glowa.glowabackendspring.exception.LoginException;
 import glowa.glowabackendspring.exhandler.ErrorResult;
+import glowa.glowabackendspring.payload.ResponseCode;
 import glowa.glowabackendspring.service.UserService;
 import glowa.glowabackendspring.domain.User;
 import glowa.glowabackendspring.session.SessionConst;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -33,21 +36,21 @@ public class UserApiController {
     @ExceptionHandler
     public ErrorResult loginExHandler(LoginException e) {
         log.error("[exceptionHandler] ex", e);
-        return new ErrorResult("400", e.getMessage());
+        return new ErrorResult(ResponseCode.CLIENT_ERROR, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
     public ErrorResult bindingExHandler(BindingException e) {
         log.error("[exceptionHandler] ex", e);
-        return new ErrorResult("400", e.getMessage());
+        return new ErrorResult(ResponseCode.CLIENT_ERROR, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler
     public ErrorResult bindingExHandler(ConflictException e) {
         log.error("[exceptionHandler] ex", e);
-        return new ErrorResult("409", e.getMessage());
+        return new ErrorResult(ResponseCode.CONFLICT_ERROR, e.getMessage());
     }
 
     @PostMapping("/join") //회원가입
@@ -83,12 +86,20 @@ public class UserApiController {
     }
 
     @GetMapping("/auth/logout")
-    public String logout(HttpServletRequest req) {
+    public int logout(HttpServletRequest req) {
         HttpSession session = req.getSession(false);
         if (session != null) {
             session.invalidate();
         }
-        return "200";
+        return ResponseCode.OK;
+    }
+
+    @PostMapping("/search")
+    public SearchResponse search(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user, @RequestBody SearchRequest req) {
+        log.info("nickname = {}", req.nickname);
+        log.info("user = {}", user.getId());
+        List<UserInfoDto> search = userService.search(req.nickname, user);
+        return new SearchResponse(ResponseCode.OK, userService.search(req.nickname, user));
     }
 
     private void bindingResultException(BindingResult bindingResult) {
@@ -129,4 +140,17 @@ public class UserApiController {
         private Long id;
         private String nickname;
     }
+
+    @Data
+    static class SearchRequest {
+        private String nickname;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class SearchResponse {
+        int code;
+        List<UserInfoDto> userInfoList;
+    }
+
 }
