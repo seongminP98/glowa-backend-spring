@@ -49,4 +49,9 @@ public class FavoritesService {
         }
         return resultFavoritesList;
     }
+
+    @Transactional
+    public void delete(long favoritesId) {
+        favoritesRepository.deleteById(favoritesId);
+    }
 }
