@@ -58,4 +58,17 @@ public class ReqFriendService {
 
         return friendReqList;
     }
+
+    public void acceptReq(User me, Long reqId) {
+        Optional<User> reqFriend = userRepository.findById(reqId);
+        Optional<User> userMe = userRepository.findById(me.getId());
+        if (reqFriend.isEmpty() || userMe.isEmpty()) {
+            throw new FriendException("잘못된 요청입니다.");
+        }
+        Friend friend = new Friend(userMe.get(), reqFriend.get());
+        friendRepository.save(friend);
+
+        reqFriendRepository.delete(reqId, me.getId());
+    }
+
 }
