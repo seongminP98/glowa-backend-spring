@@ -71,4 +71,13 @@ public class ReqFriendService {
         reqFriendRepository.delete(reqId, me.getId());
     }
 
+    public long reject(User me, Long reqId) {
+        Optional<User> reqFriend = userRepository.findById(reqId);
+        Optional<User> userMe = userRepository.findById(me.getId());
+        if (reqFriend.isEmpty() || userMe.isEmpty()) {
+            throw new FriendException("잘못된 요청입니다.");
+        }
+
+        return reqFriendRepository.delete(reqId, me.getId());
+    }
 }
