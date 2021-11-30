@@ -26,6 +26,7 @@ public class ReqFriendService {
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
 
+    @Transactional
     public ReqFriends addFriend(User me, Long friendId) {
         Optional<User> friend = userRepository.findById(friendId);
         if(friend.isEmpty()) {
@@ -59,6 +60,7 @@ public class ReqFriendService {
         return friendReqList;
     }
 
+    @Transactional
     public void acceptReq(User me, Long reqId) {
         Optional<User> reqFriend = userRepository.findById(reqId);
         Optional<User> userMe = userRepository.findById(me.getId());
@@ -71,6 +73,7 @@ public class ReqFriendService {
         reqFriendRepository.delete(reqId, me.getId());
     }
 
+    @Transactional
     public long reject(User me, Long reqId) {
         Optional<User> reqFriend = userRepository.findById(reqId);
         Optional<User> userMe = userRepository.findById(me.getId());

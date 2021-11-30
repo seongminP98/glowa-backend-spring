@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FavoritesRepository extends JpaRepository<Favorites, Long> {
-    Optional<Favorites> findOneByUserAndAddress(User user, String address);
+    Optional<Favorites> findOneByUserAndRestaurantAndAddress(User user, String restaurant, String address);
     List<Favorites> findAllByUser(User user);
 }

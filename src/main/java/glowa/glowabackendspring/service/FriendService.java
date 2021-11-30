@@ -33,6 +33,7 @@ public class FriendService {
         return resultFriendList;
     }
 
+    @Transactional
     public long delete(User me, User friend) {
         Optional<User> user1 = userRepository.findById(me.getId());
         Optional<User> user2 = userRepository.findById(friend.getId());
