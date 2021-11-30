@@ -58,10 +58,10 @@ class FavoritesRepositoryTest {
         Optional<User> userA = userRepository.findById(1L);
         Optional<User> userB = userRepository.findById(2L);
 
-        userA.flatMap(user -> favoritesRepository.findOneByUserAndAddress(user, "천호동 55"))
+        userA.flatMap(user -> favoritesRepository.findOneByUserAndRestaurantAndAddress(user, "롯데리아", "천호동 55"))
                 .ifPresent(favorites -> assertThat(favorites.getId()).isEqualTo(2));
 
-        userB.flatMap(user -> favoritesRepository.findOneByUserAndAddress(user, "아차산역 21"))
+        userB.flatMap(user -> favoritesRepository.findOneByUserAndRestaurantAndAddress(user, "돈까스","아차산역 21"))
                 .ifPresent(favorites -> assertThat(favorites.getId()).isEqualTo(4));
     }
 
