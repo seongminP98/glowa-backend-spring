@@ -3,6 +3,7 @@ package glowa.glowabackendspring.service;
 import glowa.glowabackendspring.domain.Friend;
 import glowa.glowabackendspring.domain.ReqFriends;
 import glowa.glowabackendspring.domain.User;
+import glowa.glowabackendspring.dto.user.UserInfoDto;
 import glowa.glowabackendspring.exception.AddFriendException;
 import glowa.glowabackendspring.repository.friend.FriendRepository;
 import glowa.glowabackendspring.repository.reqFriend.ReqFriendRepository;
@@ -13,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -47,5 +50,9 @@ public class ReqFriendService {
         }
 
         return reqFriendRepository.save(new ReqFriends(me, friend.get()));
+    }
+
+    public List<UserInfoDto> reqList(User me) {
+        return reqFriendRepository.reqList(me.getId());
     }
 }
