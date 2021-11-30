@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -35,5 +36,17 @@ public class FavoritesService {
         }
         Favorites favorites = new Favorites(userMe.get(), favoritesInfo.getRestaurant(), favoritesInfo.getAddress(), favoritesInfo.getKind());
         return favoritesRepository.save(favorites);
+    }
+
+    public List<Favorites> favoritesList(User me) {
+        Optional<User> userMe = userRepository.findById(me.getId());
+        if(userMe.isEmpty()) {
+            throw new LoginException("잘못된 사용자입니다. 다시 로그인해주세요.");
+        }
+        List<Favorites> resultFavoritesList = favoritesRepository.findAllByUser(userMe.get());
+        if(resultFavoritesList.size() == 0) {
+            throw new FavoritesException("즐겨찾기 리스트가 비어있습니다.");
+        }
+        return resultFavoritesList;
     }
 }
