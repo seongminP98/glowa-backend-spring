@@ -3,10 +3,16 @@ package glowa.glowabackendspring.repository.friend;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import glowa.glowabackendspring.domain.Friend;
 import glowa.glowabackendspring.domain.QFriend;
+import glowa.glowabackendspring.domain.QUser;
+import glowa.glowabackendspring.dto.user.QUserInfoDto;
+import glowa.glowabackendspring.dto.user.UserInfoDto;
 
 import javax.persistence.EntityManager;
 
+import java.util.List;
+
 import static glowa.glowabackendspring.domain.QFriend.*;
+import static glowa.glowabackendspring.domain.QUser.*;
 
 public class FriendRepositoryImpl implements FriendRepositoryCustom{
 
@@ -23,4 +29,16 @@ public class FriendRepositoryImpl implements FriendRepositoryCustom{
                 .where(friend1.me.id.eq(myId).and(friend1.friend.id.eq(friendId)))
                 .fetchOne();
     }
+
+    @Override
+    public List<UserInfoDto> friendList(Long myId) {
+        return queryFactory
+                .select(new QUserInfoDto(user.id, user.nickname, user.image))
+                .from(friend1)
+                .leftJoin(friend1.friend, user)
+                .where(friend1.me.id.eq(myId))
+                .fetch();
+    }
+
+
 }

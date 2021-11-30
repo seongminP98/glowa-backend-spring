@@ -3,6 +3,7 @@ package glowa.glowabackendspring.service;
 import glowa.glowabackendspring.domain.Friend;
 import glowa.glowabackendspring.domain.User;
 import glowa.glowabackendspring.dto.user.UserInfoDto;
+import glowa.glowabackendspring.exception.FriendException;
 import glowa.glowabackendspring.exception.LoginException;
 import glowa.glowabackendspring.exception.UserException;
 import glowa.glowabackendspring.repository.friend.FriendRepository;
@@ -24,13 +25,12 @@ public class FriendService {
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
 
-    public List<UserInfoDto> getList(User user) { //친구목록 가져오기
-        Optional<User> me = userRepository.findById(user.getId());
-        if(me.isPresent()) {
-            return userRepository.friendList(me.get().getId());
-        } else {
-            throw new LoginException("로그인 에러. 다시 로그인 해주세요.");
+    public List<UserInfoDto> getFriendList(User user) { //친구목록 가져오기
+        List<UserInfoDto> resultFriendList = friendRepository.friendList(user.getId());
+        if(resultFriendList.size() == 0) {
+            throw new FriendException("친구목록이 비어있습니다.");
         }
+        return resultFriendList;
     }
 
     public long delete(User me, User friend) {

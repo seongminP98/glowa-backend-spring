@@ -1,13 +1,17 @@
 package glowa.glowabackendspring.repository.reqFriend;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import glowa.glowabackendspring.domain.QUser;
 import glowa.glowabackendspring.domain.ReqFriends;
+import glowa.glowabackendspring.dto.user.QUserInfoDto;
+import glowa.glowabackendspring.dto.user.UserInfoDto;
 
 import javax.persistence.EntityManager;
 
 import java.util.List;
 
 import static glowa.glowabackendspring.domain.QReqFriends.*;
+import static glowa.glowabackendspring.domain.QUser.*;
 
 public class ReqFriendRepositoryImpl implements ReqFriendRepositoryCustom{
 
@@ -36,12 +40,13 @@ public class ReqFriendRepositoryImpl implements ReqFriendRepositoryCustom{
     }
 
     @Override
-    public List<ReqFriends> listReq(Long myId) {
+    public List<UserInfoDto> reqList(Long myId) {
         return queryFactory
-                .selectFrom(reqFriends)
-                .where(
-                        reqFriends.reqFriend.id.eq(myId)
-                ).fetch();
+                .select(new QUserInfoDto(user.id, user.nickname, user.image))
+                .from(reqFriends)
+                .leftJoin(reqFriends.me, user)
+                .where(reqFriends.reqFriend.id.eq(myId))
+                .fetch();
     }
 
     @Override
