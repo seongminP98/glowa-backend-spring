@@ -51,6 +51,11 @@ public class ReqFriendService {
     }
 
     public List<UserInfoDto> reqList(User me) {
-        return reqFriendRepository.reqList(me.getId());
+        List<UserInfoDto> friendReqList = reqFriendRepository.reqList(me.getId());
+        if(friendReqList.size() == 0) {
+            throw new FriendException("받은 친구요청이 없습니다.");
+        }
+
+        return friendReqList;
     }
 }
