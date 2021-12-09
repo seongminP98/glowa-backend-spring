@@ -109,7 +109,7 @@ public class InvScheduleService {
 
         Optional<User> userMe = userRepository.findById(me.getId());
         if (userMe.isEmpty()) {
-            throw new LoginException("잘못된 사용자입니다. 다시 로그인해주세요.");
+            throw new LoginException("잘못된 유저입니다. 다시 로그인해주세요.");
         }
 
         Optional<InvSchedule> invited = invScheduleRepository.findOneByScheduleAndMeAndFriend(schedule.get(), userMe.get(), friend.get());
@@ -121,6 +121,31 @@ public class InvScheduleService {
 
         invScheduleRepository.deleteByScheduleAndMeAndFriend(schedule.get(),userMe.get(),friend.get());
         return saveSchedule.getId();
+
+    }
+
+    public Long reject(Long scheduleId, Long friendId, User me) {
+        Optional<Schedule> schedule = scheduleRepository.findOneById(scheduleId);
+        if (schedule.isEmpty()) {
+            throw new ScheduleException("잘못된 일정입니다. 다시 확인해주세요.");
+        }
+
+        Optional<User> friend = userRepository.findById(friendId);
+        if (friend.isEmpty()) {
+            throw new UserException("잘못된 유저입니다. 다시 확인해주세요.");
+        }
+
+        Optional<User> userMe = userRepository.findById(me.getId());
+        if (userMe.isEmpty()) {
+            throw new LoginException("잘못된 유저입니다. 다시 로그인해주세요.");
+        }
+
+        Optional<InvSchedule> invited = invScheduleRepository.findOneByScheduleAndMeAndFriend(schedule.get(), userMe.get(), friend.get());
+        if(invited.isEmpty()) {
+            throw new ScheduleException("잘못된 스케줄입니다. 다시 확인해주세요.");
+        }
+
+        return invScheduleRepository.deleteByScheduleAndMeAndFriend(schedule.get(), userMe.get(), friend.get());
 
     }
 }
