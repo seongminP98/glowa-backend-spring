@@ -11,4 +11,5 @@ import java.util.List;
 public interface ScheduleManageRepository extends JpaRepository<ScheduleManage, Long> {
     List<ScheduleManage> findAllByUser(User user);
     List<ScheduleManage> findAllBySchedule(Schedule schedule);
+    long deleteByUserAndSchedule(User user, Schedule schedule);
 }
