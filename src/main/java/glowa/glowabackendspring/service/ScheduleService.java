@@ -64,5 +64,23 @@ public class ScheduleService {
         scheduleRepository.delete(schedule.get()); //scheduleManage 에서 어떻게 변하는지 확인.
     }
 
+    public Long exit(Long scheduleId, User me) {
+        Optional<Schedule> schedule = scheduleRepository.findOneById(scheduleId);
+        if (schedule.isEmpty()) {
+            throw new ScheduleException("잘못된 일정입니다. 다시 확인해주세요.");
+        }
+
+        Optional<User> userMe = userRepository.findById(me.getId());
+        if (userMe.isEmpty()) {
+            throw new UserException("잘못된 사용자입니다. 다시 로그인해주세요.");
+        }
+
+        if (schedule.get().getMaster().getId().equals(userMe.get().getId())) {
+            throw new UserException("일정권한 양도 후 가능합니다.");
+        }
+
+        return scheduleManageRepository.deleteByUserAndSchedule(userMe.get(), schedule.get());
+    }
+
 
 }
