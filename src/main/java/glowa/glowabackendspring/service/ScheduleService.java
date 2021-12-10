@@ -82,5 +82,45 @@ public class ScheduleService {
         return scheduleManageRepository.deleteByUserAndSchedule(userMe.get(), schedule.get());
     }
 
+    public void transferMaster(User me, Long scheduleId, Long friendId) {
+        Optional<Schedule> schedule = scheduleRepository.findOneById(scheduleId);
+        if (schedule.isEmpty()) {
+            throw new ScheduleException("잘못된 일정입니다. 다시 확인해주세요.");
+        }
 
+        Optional<User> userMe = userRepository.findById(me.getId());
+        if (userMe.isEmpty()) {
+            throw new UserException("잘못된 사용자입니다. 다시 로그인해주세요.");
+        }
+
+        Optional<User> friend = userRepository.findById(friendId);
+        if (friend.isEmpty()) {
+            throw new UserException("잘못된 사용자입니다. 다시 확인해주세요.");
+        }
+
+        if (!schedule.get().getMaster().getId().equals(userMe.get().getId())) {
+            throw new UserException("이 일정에 대한 권한이 없습니다.");
+        }
+
+        if(userMe.get().getId().equals(friendId)) {
+            throw new UserException("자기 자신한테는 권한을 넘길 수 없습니다.");
+        }
+
+        boolean check = false;
+        List<ScheduleManage> scheduleManages = scheduleManageRepository.findAllBySchedule(schedule.get());
+        for (ScheduleManage scheduleManage : scheduleManages) {
+            if (scheduleManage.getUser().getId().equals(friendId)) {
+                check = true;
+                break;
+            }
+        }
+
+        if (!check) {
+            throw new UserException("먼저 이 일정에 초대해주세요.");
+        }
+
+        schedule.get().changeMaster(friend.get());
+        
+
+    }
 }
