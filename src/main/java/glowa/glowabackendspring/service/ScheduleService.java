@@ -102,7 +102,7 @@ public class ScheduleService {
             throw new UserException("이 일정에 대한 권한이 없습니다.");
         }
 
-        if(userMe.get().getId().equals(friendId)) {
+        if (userMe.get().getId().equals(friendId)) {
             throw new UserException("자기 자신한테는 권한을 넘길 수 없습니다.");
         }
 
@@ -120,7 +120,33 @@ public class ScheduleService {
         }
 
         schedule.get().changeMaster(friend.get());
-        
 
+    }
+
+    public Long kick(User me, Long scheduleId, Long targetId) {
+        Optional<Schedule> schedule = scheduleRepository.findOneById(scheduleId);
+        if (schedule.isEmpty()) {
+            throw new ScheduleException("잘못된 일정입니다. 다시 확인해주세요.");
+        }
+
+        Optional<User> userMe = userRepository.findById(me.getId());
+        if (userMe.isEmpty()) {
+            throw new UserException("잘못된 사용자입니다. 다시 로그인해주세요.");
+        }
+
+        Optional<User> target = userRepository.findById(targetId);
+        if (target.isEmpty()) {
+            throw new UserException("잘못된 사용자입니다. 다시 확인해주세요.");
+        }
+
+        if (!schedule.get().getMaster().getId().equals(userMe.get().getId())) {
+            throw new UserException("이 일정에 대한 권한이 없습니다.");
+        }
+
+        if (me.getId().equals(targetId)) {
+            throw new UserException("자기 자신은 추방할 수 없습니다.");
+        }
+
+        return scheduleManageRepository.deleteByUserAndSchedule(target.get(), schedule.get());
     }
 }
