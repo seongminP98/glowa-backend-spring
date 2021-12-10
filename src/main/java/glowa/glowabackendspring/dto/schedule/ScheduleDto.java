@@ -20,4 +20,10 @@ public class ScheduleDto {
         this.place = place;
         this.date = date;
     }
+
+    public ScheduleDto(String name, String place, LocalDateTime date) {
+        this.name = name;
+        this.place = place;
+        this.date = date;
+    }
 }
