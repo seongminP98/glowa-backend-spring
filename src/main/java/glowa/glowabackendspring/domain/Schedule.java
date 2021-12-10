@@ -30,6 +30,10 @@ public class Schedule extends BaseEntity {
     @OneToMany(mappedBy = "schedule")
     private List<InvSchedule> invSchedules = new ArrayList<>();
 
+    public void changeMaster(User master) {
+        this.master = master;
+    }
+
     public Schedule(User master, String name, LocalDateTime date, String place) {
         this.master = master;
         this.name = name;
