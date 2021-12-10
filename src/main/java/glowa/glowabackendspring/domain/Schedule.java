@@ -34,6 +34,18 @@ public class Schedule extends BaseEntity {
         this.master = master;
     }
 
+    public void changeName(String name) {
+        this.name = name;
+    }
+
+    public void changeDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public void changePlace(String place) {
+        this.place = place;
+    }
+
     public Schedule(User master, String name, LocalDateTime date, String place) {
         this.master = master;
         this.name = name;
