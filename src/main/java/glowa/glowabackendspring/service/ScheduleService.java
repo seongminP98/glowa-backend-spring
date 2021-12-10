@@ -46,6 +46,7 @@ public class ScheduleService {
 
     }
 
+    @Transactional
     public void delete(Long scheduleId, User me) {
         Optional<Schedule> schedule = scheduleRepository.findOneById(scheduleId);
         if (schedule.isEmpty()) {
@@ -64,6 +65,7 @@ public class ScheduleService {
         scheduleRepository.delete(schedule.get()); //scheduleManage 에서 어떻게 변하는지 확인.
     }
 
+    @Transactional
     public Long exit(Long scheduleId, User me) {
         Optional<Schedule> schedule = scheduleRepository.findOneById(scheduleId);
         if (schedule.isEmpty()) {
@@ -82,6 +84,7 @@ public class ScheduleService {
         return scheduleManageRepository.deleteByUserAndSchedule(userMe.get(), schedule.get());
     }
 
+    @Transactional
     public void transferMaster(User me, Long scheduleId, Long friendId) {
         Optional<Schedule> schedule = scheduleRepository.findOneById(scheduleId);
         if (schedule.isEmpty()) {
@@ -123,6 +126,7 @@ public class ScheduleService {
 
     }
 
+    @Transactional
     public Long kick(User me, Long scheduleId, Long targetId) {
         Optional<Schedule> schedule = scheduleRepository.findOneById(scheduleId);
         if (schedule.isEmpty()) {
@@ -148,5 +152,38 @@ public class ScheduleService {
         }
 
         return scheduleManageRepository.deleteByUserAndSchedule(target.get(), schedule.get());
+    }
+
+    @Transactional
+    public void modify(Long scheduleId, ScheduleDto scheduleDto, User me) {
+        Optional<User> userMe = userRepository.findById(me.getId());
+        if (userMe.isEmpty()) {
+            throw new UserException("잘못된 사용자입니다. 다시 로그인해주세요.");
+        }
+
+        Optional<Schedule> schedule = scheduleRepository.findOneById(scheduleId);
+        if (schedule.isEmpty()) {
+            throw new ScheduleException("잘못된 일정입니다. 다시 확인해주세요.");
+        }
+
+        if (!schedule.get().getMaster().getId().equals(me.getId())) {
+            throw new UserException("이 일정에 대한 권한이 없습니다.");
+        }
+
+        Optional<Schedule> nameCheck = scheduleRepository.findOneByMasterAndName(userMe.get(), scheduleDto.getName());
+        if (nameCheck.isPresent()) {
+            throw new ScheduleException("일정 이름을 변경해 주세요.");
+        }
+
+        if (scheduleDto.getDate() != null) {
+            schedule.get().changeDate(scheduleDto.getDate());
+        }
+        if (scheduleDto.getName() != null) {
+            schedule.get().changeName(scheduleDto.getName());
+        }
+        if (scheduleDto.getPlace() != null) {
+            schedule.get().changePlace(scheduleDto.getPlace());
+        }
+
     }
 }
