@@ -1,8 +1,10 @@
 package glowa.glowabackendspring.service;
 
+import glowa.glowabackendspring.domain.InvSchedule;
 import glowa.glowabackendspring.domain.Schedule;
 import glowa.glowabackendspring.domain.ScheduleManage;
 import glowa.glowabackendspring.domain.User;
+import glowa.glowabackendspring.dto.schedule.InvScheduleDto;
 import glowa.glowabackendspring.dto.schedule.ScheduleDetail;
 import glowa.glowabackendspring.dto.schedule.ScheduleDto;
 import glowa.glowabackendspring.dto.user.UserInfoDto;
@@ -221,6 +223,34 @@ public class ScheduleService {
                 schedule.get().getDate(), schedule.get().getMaster().getNickname(),
                 members
         );
+    }
 
+    public List<ScheduleDetail> list(User me) {
+        Optional<User> userMe = userRepository.findById(me.getId());
+        if (userMe.isEmpty()) {
+            throw new LoginException("잘못된 사용자입니다. 다시 로그인해주세요.");
+        }
+        List<ScheduleManage> scheduleManageList = scheduleManageRepository.findAllByUser(userMe.get());
+        List<ScheduleDetail> resultList = new ArrayList<>();
+        for (ScheduleManage scheduleManage : scheduleManageList) {
+            List<UserInfoDto> members = new ArrayList<>();
+            Optional<Schedule> schedule = scheduleRepository.findOneById(scheduleManage.getSchedule().getId());
+            if(schedule.isPresent()) {
+                List<ScheduleManage> scheduleMembers = scheduleManageRepository.findAllBySchedule(schedule.get());
+                for (ScheduleManage scheduleMember : scheduleMembers) {
+                    members.add(new UserInfoDto(
+                            scheduleMember.getUser().getId(),
+                            scheduleMember.getUser().getNickname(),
+                            scheduleMember.getUser().getImage()));
+                }
+                resultList.add(new ScheduleDetail(
+                        schedule.get().getId(), schedule.get().getMaster().getId(),
+                        schedule.get().getName(), schedule.get().getPlace(),
+                        schedule.get().getDate(), schedule.get().getMaster().getNickname(),
+                        members));
+            }
+        }
+
+        return resultList;
     }
 }
