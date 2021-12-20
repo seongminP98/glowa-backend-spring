@@ -90,6 +90,15 @@ public class FriendApiController {
         return ResponseCode.OK;
     }
 
+    @GetMapping("/list")
+    public ListResponse friendList(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user) {
+        if (user == null) {
+            throw new LoginException("로그인 되어있지 않음");
+        }
+
+        return new ListResponse(ResponseCode.OK, friendService.getFriendList(user));
+    }
+
     @Data
     static class FriendRequest {
         @NotEmpty(message = "친구 아이디 값은 비어있을 수 없습니다.")
