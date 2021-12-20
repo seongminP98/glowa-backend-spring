@@ -34,9 +34,9 @@ public class FriendService {
     }
 
     @Transactional
-    public long delete(User me, User friend) {
+    public long delete(User me, Long friendId) {
         Optional<User> user1 = userRepository.findById(me.getId());
-        Optional<User> user2 = userRepository.findById(friend.getId());
+        Optional<User> user2 = userRepository.findById(friendId);
         if(user1.isPresent() && user2.isPresent()) {
             long result1 = friendRepository.deleteByMeAndFriend(user1.get(), user2.get());
             long result2 = friendRepository.deleteByMeAndFriend(user2.get(), user1.get());
