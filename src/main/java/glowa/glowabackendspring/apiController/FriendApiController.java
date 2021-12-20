@@ -99,6 +99,15 @@ public class FriendApiController {
         return new ListResponse(ResponseCode.OK, friendService.getFriendList(user));
     }
 
+    @DeleteMapping
+    public int deleteFriend(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user, @RequestParam("friendId") @Validated FriendRequest request) {
+        if (user == null) {
+            throw new LoginException("로그인 되어있지 않음");
+        }
+        friendService.delete(user, request.friendId);
+        return ResponseCode.OK;
+    }
+
     @Data
     static class FriendRequest {
         @NotEmpty(message = "친구 아이디 값은 비어있을 수 없습니다.")
