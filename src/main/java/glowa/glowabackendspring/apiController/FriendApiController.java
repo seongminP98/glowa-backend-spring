@@ -80,6 +80,16 @@ public class FriendApiController {
         return ResponseCode.OK;
     }
 
+    @PostMapping("/reject")
+    public int reject(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user, @RequestBody @Validated FriendRequest request) {
+        if (user == null) {
+            throw new LoginException("로그인 되어있지 않음");
+        }
+
+        reqFriendService.reject(user, request.friendId);
+        return ResponseCode.OK;
+    }
+
     @Data
     static class FriendRequest {
         @NotEmpty(message = "친구 아이디 값은 비어있을 수 없습니다.")
