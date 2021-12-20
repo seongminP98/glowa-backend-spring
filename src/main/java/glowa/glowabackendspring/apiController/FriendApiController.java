@@ -53,8 +53,8 @@ public class FriendApiController {
     }
 
     @PostMapping("/add")
-    public int addFriend(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user, @RequestBody @Validated AddFriendRequest request) {
-        if(user == null) {
+    public int addFriend(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user, @RequestBody @Validated FriendRequest request) {
+        if (user == null) {
             throw new LoginException("로그인 되어있지 않음");
         }
         reqFriendService.addFriend(user, request.friendId);
@@ -63,16 +63,26 @@ public class FriendApiController {
 
     @GetMapping("/req/list")
     public ListResponse requestFriendList(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user) {
-        if(user == null) {
+        if (user == null) {
             throw new LoginException("로그인 되어있지 않음");
         }
 
         return new ListResponse(ResponseCode.OK, reqFriendService.reqList(user));
     }
 
+    @PostMapping("/accept")
+    public int accept(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user, @RequestBody @Validated FriendRequest request) {
+        if (user == null) {
+            throw new LoginException("로그인 되어있지 않음");
+        }
+
+        reqFriendService.acceptReq(user, request.friendId);
+        return ResponseCode.OK;
+    }
+
     @Data
-    static class AddFriendRequest{
-        @NotEmpty(message = "친구 요청하는 아이디 값은 비어있을 수 없습니다.")
+    static class FriendRequest {
+        @NotEmpty(message = "친구 아이디 값은 비어있을 수 없습니다.")
         private Long friendId;
     }
 
