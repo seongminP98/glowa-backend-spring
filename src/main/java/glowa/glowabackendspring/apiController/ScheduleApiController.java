@@ -58,11 +58,28 @@ public class ScheduleApiController {
         return ResponseCode.OK;
     }
 
+    @PostMapping("/invite")
+    public int invite(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user, InviteRequest request) {
+        if (user == null) {
+            throw new LoginException("로그인 되어있지 않음");
+        }
+        invScheduleService.invite(user, request.friendId, request.scheduleId);
+        return ResponseCode.OK;
+    }
+
     @Data
     static class MakeRequest {
         @NotEmpty(message = "스케줄 이름은 비어있을 수 없습니다.")
         private String name;
         private String place;
         private LocalDateTime date;
+    }
+
+    @Data
+    static class InviteRequest {
+        @NotEmpty(message = "스케줄 id 값은 비어있을 수 없습니다.")
+        private Long scheduleId;
+        @NotEmpty(message = "친구 id 값은 비어있을 수 없습니다.")
+        private Long friendId;
     }
 }
