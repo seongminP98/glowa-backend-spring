@@ -9,6 +9,7 @@ import glowa.glowabackendspring.exhandler.ErrorResult;
 import glowa.glowabackendspring.payload.ResponseCode;
 import glowa.glowabackendspring.service.FavoritesService;
 import glowa.glowabackendspring.session.SessionConst;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,12 +18,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("favorites")
-public class FavoritesController {
+public class FavoritesApiController {
 
     private final FavoritesService favoritesService;
 
@@ -45,11 +47,22 @@ public class FavoritesController {
         return ResponseCode.OK;
     }
 
+    public ListResponse list(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user) {
+        return new ListResponse(ResponseCode.OK, favoritesService.favoritesList(user));
+    }
+
     @Data
     static class FavoritesRequest{
         @NotEmpty(message = "식당 이름은 비어있을 수 없습니다.")
         private String restaurant;
         private String address;
         private String kind;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class ListResponse{
+        private int conde;
+        private List<Favorites> resultList;
     }
 }
