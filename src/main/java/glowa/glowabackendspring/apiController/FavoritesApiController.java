@@ -42,11 +42,13 @@ public class FavoritesApiController {
         return new ErrorResult(ResponseCode.CLIENT_ERROR, e.getMessage());
     }
 
+    @PostMapping("/add")
     public int add(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user, @RequestBody @Validated FavoritesRequest request) {
         favoritesService.add(new FavoritesInfoDto(request.restaurant, request.address, request.kind), user);
         return ResponseCode.OK;
     }
 
+    @GetMapping("/list")
     public ListResponse list(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user) {
         return new ListResponse(ResponseCode.OK, favoritesService.favoritesList(user));
     }
