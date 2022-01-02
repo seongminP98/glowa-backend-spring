@@ -76,6 +76,15 @@ public class ScheduleApiController {
         return ResponseCode.OK;
     }
 
+    @PostMapping("/reject")
+    public int reject(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user, InviteRequest request) {
+        if (user == null) {
+            throw new LoginException("로그인 되어있지 않음");
+        }
+        invScheduleService.reject(request.scheduleId, request.friendId, user);
+        return ResponseCode.OK;
+    }
+
     @Data
     static class MakeRequest {
         @NotEmpty(message = "스케줄 이름은 비어있을 수 없습니다.")
