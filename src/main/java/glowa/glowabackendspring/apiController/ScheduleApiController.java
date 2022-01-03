@@ -1,6 +1,7 @@
 package glowa.glowabackendspring.apiController;
 
 import glowa.glowabackendspring.domain.User;
+import glowa.glowabackendspring.dto.schedule.InvScheduleDto;
 import glowa.glowabackendspring.dto.schedule.ScheduleDto;
 import glowa.glowabackendspring.exception.LoginException;
 import glowa.glowabackendspring.exception.ScheduleException;
@@ -10,6 +11,7 @@ import glowa.glowabackendspring.payload.ResponseCode;
 import glowa.glowabackendspring.service.InvScheduleService;
 import glowa.glowabackendspring.service.ScheduleService;
 import glowa.glowabackendspring.session.SessionConst;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -85,6 +88,15 @@ public class ScheduleApiController {
         return ResponseCode.OK;
     }
 
+    @GetMapping("/invite/list")
+    public InviteListResponse invScheduleList(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user) {
+        if (user == null) {
+            throw new LoginException("로그인 되어있지 않음");
+        }
+
+        return new InviteListResponse(ResponseCode.OK, invScheduleService.list(user));
+    }
+
     @Data
     static class MakeRequest {
         @NotEmpty(message = "스케줄 이름은 비어있을 수 없습니다.")
@@ -99,5 +111,12 @@ public class ScheduleApiController {
         private Long scheduleId;
         @NotEmpty(message = "친구 id 값은 비어있을 수 없습니다.")
         private Long friendId;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class InviteListResponse {
+        int code;
+        List<InvScheduleDto> invScheduleList;
     }
 }
