@@ -97,6 +97,16 @@ public class ScheduleApiController {
         return new InviteListResponse(ResponseCode.OK, invScheduleService.list(user));
     }
 
+    @PatchMapping("/")
+    public int modify(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user, ModifyRequest request) {
+        if (user == null) {
+            throw new LoginException("로그인 되어있지 않음");
+        }
+
+        scheduleService.modify(request.scheduleId, new ScheduleDto(request.name, request.place, request.date), user);
+        return ResponseCode.OK;
+    }
+
     @Data
     static class MakeRequest {
         @NotEmpty(message = "스케줄 이름은 비어있을 수 없습니다.")
@@ -116,7 +126,16 @@ public class ScheduleApiController {
     @Data
     @AllArgsConstructor
     static class InviteListResponse {
-        int code;
-        List<InvScheduleDto> invScheduleList;
+        private int code;
+        private List<InvScheduleDto> invScheduleList;
+    }
+
+    @Data
+    static class ModifyRequest {
+        @NotEmpty(message = "스케줄 id 값은 비어있을 수 없습니다.")
+        private Long scheduleId;
+        private String name;
+        private LocalDateTime date;
+        private String place;
     }
 }
