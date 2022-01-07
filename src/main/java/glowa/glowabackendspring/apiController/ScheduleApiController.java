@@ -62,7 +62,7 @@ public class ScheduleApiController {
     }
 
     @PostMapping("/invite")
-    public int invite(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user, InviteRequest request) {
+    public int invite(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user, ScheduleRequest request) {
         if (user == null) {
             throw new LoginException("로그인 되어있지 않음");
         }
@@ -71,7 +71,7 @@ public class ScheduleApiController {
     }
 
     @PostMapping("/accept")
-    public int accept(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user, InviteRequest request) {
+    public int accept(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user, ScheduleRequest request) {
         if (user == null) {
             throw new LoginException("로그인 되어있지 않음");
         }
@@ -80,7 +80,7 @@ public class ScheduleApiController {
     }
 
     @PostMapping("/reject")
-    public int reject(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user, InviteRequest request) {
+    public int reject(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user, ScheduleRequest request) {
         if (user == null) {
             throw new LoginException("로그인 되어있지 않음");
         }
@@ -107,6 +107,16 @@ public class ScheduleApiController {
         return ResponseCode.OK;
     }
 
+    @PostMapping("/transfer")
+    public int transfer(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user, ScheduleRequest request) {
+        if (user == null) {
+            throw new LoginException("로그인 되어있지 않음");
+        }
+
+        scheduleService.transferMaster(user, request.scheduleId, request.friendId);
+        return ResponseCode.OK;
+    }
+
     @Data
     static class MakeRequest {
         @NotEmpty(message = "스케줄 이름은 비어있을 수 없습니다.")
@@ -116,7 +126,7 @@ public class ScheduleApiController {
     }
 
     @Data
-    static class InviteRequest {
+    static class ScheduleRequest {
         @NotEmpty(message = "스케줄 id 값은 비어있을 수 없습니다.")
         private Long scheduleId;
         @NotEmpty(message = "친구 id 값은 비어있을 수 없습니다.")
