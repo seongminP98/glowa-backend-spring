@@ -117,6 +117,16 @@ public class ScheduleApiController {
         return ResponseCode.OK;
     }
 
+    @PostMapping("/kick")
+    public int kick(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User user, ScheduleRequest request) {
+        if (user == null) {
+            throw new LoginException("로그인 되어있지 않음");
+        }
+
+        scheduleService.kick(user, request.scheduleId, request.friendId);
+        return ResponseCode.OK;
+    }
+
     @Data
     static class MakeRequest {
         @NotEmpty(message = "스케줄 이름은 비어있을 수 없습니다.")
